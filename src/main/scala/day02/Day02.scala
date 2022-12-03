@@ -29,15 +29,10 @@ type Instruction = (Them, Us)
 val input: List[Instruction] = source.getLines().map { case s"${them} ${us}" => (Them.valueOf(them), Us.valueOf(us))}.toList
 val checkArray: Array[RPS] = RPS.values ++ RPS.values
 
-def outcomeScore(them: RPS, us: RPS): Int =
-    for idxUs <- 0 to 3 do
-        if checkArray(idxUs) == us then
-            for idxThem <- idxUs to (idxUs + 3) do
-                if checkArray(idxThem) == them then return idxThem - idxUs match
-                    case 0 => 3
-                    case 1 => 0
-                    case 2 => 6
-    throw new RuntimeException("Unreachable")
+def outcomeScore(them: RPS, us: RPS): Int = (us.ordinal - them.ordinal + 3) % 3 match
+    case 2 => 0
+    case 1 => 6
+    case 0 => 3
 
 def usScore(us: RPS): Int = us.ordinal + 1
 
