@@ -7,7 +7,6 @@ val input: List[Rucksack] = source.getLines().toList
 
 type Rucksack = String
 type Item = Char
-type Contents = Seq[Char]
 
 object Priority:
     def unapply(item: Item): Priority = new Priority(item)
