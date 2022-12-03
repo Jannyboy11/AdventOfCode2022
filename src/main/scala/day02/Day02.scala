@@ -1,15 +1,16 @@
 package day02
 
 import scala.io.Source;
+import RPS.*
+import Outcome.*
 
 val source = Source.fromResource("day02.in")
 
 enum RPS:
     case Rock, Paper, Scissors
+
 enum Outcome:
-    case Win, Lose, Draw
-import RPS.*
-import Outcome.*
+    case Draw, Win, Lose
 
 enum Them(rps: RPS):
     case A extends Them(Rock)
@@ -24,10 +25,7 @@ enum Us(rps: RPS, oc: Outcome):
     def token: RPS = rps
     def outcome: Outcome = oc
 
-type Instruction = (Them, Us)
-
-val input: List[Instruction] = source.getLines().map { case s"${them} ${us}" => (Them.valueOf(them), Us.valueOf(us))}.toList
-val checkArray: Array[RPS] = RPS.values ++ RPS.values
+val input: List[(Them, Us)] = source.getLines().map { case s"${them} ${us}" => (Them.valueOf(them), Us.valueOf(us))}.toList
 
 def outcomeScore(them: RPS, us: RPS): Int = (us.ordinal - them.ordinal + 3) % 3 match
     case 2 => 0
@@ -38,12 +36,7 @@ def usScore(us: RPS): Int = us.ordinal + 1
 
 def score(them: RPS, us: RPS): Int =  outcomeScore(them, us) + usScore(us)
 
-def calculateToken(them: RPS, outcome: Outcome): RPS =
-    val theirIdx = them.ordinal
-    outcome match
-        case Win => checkArray(theirIdx + 1)
-        case Lose => checkArray(theirIdx + 2)
-        case Draw => checkArray(theirIdx)
+def calculateToken(them: RPS, outcome: Outcome): RPS = RPS.fromOrdinal((them.ordinal + outcome.ordinal) % 3)
 
 @main def main(): Unit = {
 
