@@ -8,19 +8,21 @@ val input: List[Rucksack] = source.getLines().toList
 type Rucksack = String
 type Item = Char
 
-object Priority:
-    def unapply(item: Item): Priority = new Priority(item)
+object ItemRange:
+    def unapply(item: Item): ItemRange =
+        if 'a' <= item && item <= 'z' then ItemRange.Lower
+        else if 'A' <= item && item <= 'Z' then ItemRange.Upper
+        else ItemRange.OutOfBounds
 
-class Priority(item: Item):
-    private val start: Int =
-        if ('a' <= item && item <= 'z') then 1 - 'a'.toInt
-        else if ('A' <= item && item <= 'Z') then 27 - 'A'.toInt
-        else Int.MinValue
-    def isEmpty: Boolean = start == Int.MinValue
-    def get: Int = start + item.toInt
+enum ItemRange(base: Int):
+    case Lower extends ItemRange(1 - 'a'.toInt)
+    case Upper extends ItemRange(27 - 'A'.toInt)
+    case OutOfBounds extends ItemRange(Int.MinValue)
+    def isEmpty: Boolean = this == ItemRange.OutOfBounds
+    def get: Int = base
 
 def priority(item: Item): Int = item match
-    case Priority(priority) => priority
+    case ItemRange(base) => base + item.toInt
 
 def overlappingItem(rucksack: Rucksack): Item = rucksack.splitAt(rucksack.length / 2) match
     case (one, two) => one.toSet.intersect(two.toSet).head

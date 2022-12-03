@@ -1,8 +1,8 @@
-package day03
+package day04
 
 import scala.io.Source;
 
-val source = Source.fromResource("day03.in")
+val source = Source.fromResource("day04.in")
 
 
 @main def main: Unit = {
