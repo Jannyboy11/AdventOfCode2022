@@ -10,8 +10,7 @@ def fullyContained(a: Range, b: Range): Boolean =
     (b.start <= a.start && a.end <= b.end)
 
 def overlap(a: Range, b: Range): Boolean =
-    (a.start <= b.start && b.start <= a.end) || (a.start <= b.end && b.end <= a.end) ||
-    (b.start <= a.start && a.start <= b.end) || (b.start <= a.end && a.end <= b.end)
+    a.contains(b.start) || a.contains(b.end) || b.contains(a.start) || b.contains(a.end)
 
 @main def main: Unit = {
 
