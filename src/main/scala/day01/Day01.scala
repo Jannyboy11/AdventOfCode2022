@@ -10,7 +10,7 @@ val calories: IndexedSeq[Iterable[Int]] = {
     var i = 0
     var listBuilder = List.newBuilder[Int]
     while i < input.size do
-        var string = input(i)
+        val string = input(i)
         if string.isEmpty then
             resultBuilder.addOne(listBuilder.result())
             listBuilder = List.newBuilder[Int]

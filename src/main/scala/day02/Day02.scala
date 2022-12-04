@@ -5,6 +5,7 @@ import RPS.*
 import Outcome.*
 
 val source = Source.fromResource("day02.in")
+val input: List[(Them, Us)] = source.getLines().map { case s"${them} ${us}" => (Them.valueOf(them), Us.valueOf(us))}.toList
 
 enum RPS:
     case Rock, Paper, Scissors
@@ -24,8 +25,6 @@ enum Us(rps: RPS, oc: Outcome):
     case Z extends Us(Scissors, Win)
     def token: RPS = rps
     def outcome: Outcome = oc
-
-val input: List[(Them, Us)] = source.getLines().map { case s"${them} ${us}" => (Them.valueOf(them), Us.valueOf(us))}.toList
 
 def outcomeScore(them: RPS, us: RPS): Int = (us.ordinal - them.ordinal + 3) % 3 match
     case 2 => 0
