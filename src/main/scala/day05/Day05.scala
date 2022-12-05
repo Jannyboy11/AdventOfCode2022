@@ -2,7 +2,6 @@ package day05
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
-import scala.util.matching.Regex
 
 val source = Source.fromResource("day05.in"); val NumStacks = 9
 val input = source.getLines().toList
@@ -40,20 +39,16 @@ inline def moveN(stackFrom: Stack, stackTo: Stack, amount: Int, inline reverse: 
     val newTo = inline if reverse then stackTo.reverse_:::(crates) else crates ++ stackTo
     (newFrom, newTo)
 
-def interpret1(dock: Dock, move: Move): Dock =
-    val (stackFrom, stackTo) = moveN(dock(move.from), dock(move.to), move.count, true)
-    dock.updated(move.from, stackFrom).updated(move.to, stackTo)
-
-def interpret2(dock: Dock, move: Move): Dock =
-    val (stackFrom, stackTo) = moveN(dock(move.from), dock(move.to), move.count, false)
+inline def interpret(dock: Dock, move: Move, inline reversePoppedCrates: Boolean): Dock =
+    val (stackFrom, stackTo) = moveN(dock(move.from), dock(move.to), move.count, reversePoppedCrates)
     dock.updated(move.from, stackFrom).updated(move.to, stackTo)
 
 @main def main: Unit = {
 
-    val result1 = moves.foldLeft(dock)(interpret1).map(_.head).mkString
+    val result1 = moves.foldLeft(dock)(interpret(_, _, true)).map(_.head).mkString
     println(result1)
 
-    val result2 = moves.foldLeft(dock)(interpret2).map(_.head).mkString
+    val result2 = moves.foldLeft(dock)(interpret(_, _, false)).map(_.head).mkString
     println(result2)
 
 }
