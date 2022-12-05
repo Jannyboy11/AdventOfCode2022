@@ -9,6 +9,7 @@ val input = source.getLines().toList
 type Crate = Char
 type Stack = List[Crate] //head = top of the stack
 type Dock = IndexedSeq[Stack]
+case class Move(count: Int, from: Int, to: Int)
 
 val (dock: Dock, moves: List[Move]) = {
     val d: IndexedSeq[ListBuffer[Crate]] = IndexedSeq.fill(NumStacks)(new ListBuffer[Crate]())
@@ -18,7 +19,7 @@ val (dock: Dock, moves: List[Move]) = {
         case s if s.nonEmpty && (s.charAt(0) == '[' || s.charAt(0) == ' ') =>
             for i <- 0 until NumStacks do
                 val idx = i * 4 + 1
-                if idx <= s.length then
+                if idx < s.length then
                     val c = s.charAt(idx)
                     if c.isLetter then
                         d(i).addOne(c)
@@ -31,8 +32,6 @@ val (dock: Dock, moves: List[Move]) = {
 
     (d.map(_.result()), moves.result())
 }
-
-case class Move(count: Int, from: Int, to: Int)
 
 inline def moveN(stackFrom: Stack, stackTo: Stack, amount: Int, inline reverse: Boolean): (Stack, Stack) =
     val (crates, newFrom) = stackFrom.splitAt(amount)
