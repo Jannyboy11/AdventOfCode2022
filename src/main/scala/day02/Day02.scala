@@ -33,7 +33,7 @@ def outcomeScore(them: RPS, us: RPS): Int = (us.ordinal - them.ordinal + 3) % 3 
 
 def usScore(us: RPS): Int = us.ordinal + 1
 
-def score(them: RPS, us: RPS): Int =  outcomeScore(them, us) + usScore(us)
+def score(them: RPS, us: RPS): Int = outcomeScore(them, us) + usScore(us)
 
 def calculateToken(them: RPS, outcome: Outcome): RPS = RPS.fromOrdinal((them.ordinal + outcome.ordinal) % 3)
 
