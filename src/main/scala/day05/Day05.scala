@@ -35,7 +35,7 @@ val (dock: Dock, moves: List[Move]) = {
 
 inline def moveN(stackFrom: Stack, stackTo: Stack, amount: Int, inline reverse: Boolean): (Stack, Stack) =
     val (crates, newFrom) = stackFrom.splitAt(amount)
-    val newTo = inline if reverse then stackTo.reverse_:::(crates) else crates ++ stackTo
+    val newTo = inline if reverse then crates reverse_::: stackTo else crates ::: stackTo
     (newFrom, newTo)
 
 inline def interpret(dock: Dock, move: Move, inline reversePoppedCrates: Boolean): Dock =
