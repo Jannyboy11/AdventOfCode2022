@@ -8,16 +8,29 @@ def warmup(): Unit =
 @main def naive_benchmark: Unit = {
     warmup()
 
-    val oldTime = System.nanoTime()
-    o_main
-    val midTime = System.nanoTime()
-    bb_main
-    val newTime = System.nanoTime()
+    val iterations = 100
+    var i = 0
 
-    val mySolutionNanos = midTime - oldTime
-    val bbSolutionNanos = newTime - midTime
+    var Jan: Long = 0
+    var Bishabosha: Long = 0
 
-    println(s"Jan's optimised solution took $mySolutionNanos nanoseconds")
-    println(s"Bishabosha's optimised solution took $bbSolutionNanos nanoseconds")
+    while i < iterations do
+        val oldTime = System.nanoTime()
+        o_main
+        val midTime = System.nanoTime()
+        bb_main
+        val newTime = System.nanoTime()
+
+        Jan += midTime - oldTime
+        Bishabosha += newTime - midTime
+
+        i += 1
+
+    val mySolutionNanos = Jan / iterations
+    val bbSolutionNanos = Bishabosha / iterations
+
+    println(s"Jan's optimised solution took $mySolutionNanos nanoseconds on average")
+    println(s"Bishabosha's optimised solution took $bbSolutionNanos nanoseconds on average")
     println(s"${if mySolutionNanos < bbSolutionNanos then "Jan" else "Bishabosha"} wins!")
+    
 }
