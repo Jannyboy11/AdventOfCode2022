@@ -9,20 +9,23 @@ package day06
 inline def o_bitCode(char: Char): Int =
     1 << (char - 'a')
 
-inline def makeSet(input: String, from: Int, to: Int): Int =
+def o_makeSet(input: String, from: Int, to: Int): Int =
     var i = from;
     var res = 0
     while i < to do
-        res = res | o_bitCode(input.charAt(i))
+        val newRes = res | o_bitCode(input.charAt(i))
+        if newRes == res then
+            return newRes
+        res = newRes
         i += 1
     res
 
 def o_findMarker(input: String, consecutiveDistinct: Int): Int =
-    var set = makeSet(input, 0, consecutiveDistinct)
+    var set = o_makeSet(input, 0, consecutiveDistinct)
 
     var i = consecutiveDistinct
     while java.lang.Integer.bitCount(set) != consecutiveDistinct do
-        set = makeSet(input, i - consecutiveDistinct, i)
+        set = o_makeSet(input, i - consecutiveDistinct, i)
         i += 1
 
     i-1
