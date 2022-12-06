@@ -8,9 +8,9 @@ object Day06Loops:
     final def main(args: Array[String]): Unit =
         //val input = Source.fromResource("Day06.input.txt").mkString
         val part1 = findMarker(input, length = 4)
-        //println(part1)
+        println(part1)
         val part2 = findMarker(input, length = 14, position = part1 + 10)
-        //println(part2)
+        println(part2)
 
     @tailrec
     def findMarker(signal: String, length: Int, position: Int = 0): Int =

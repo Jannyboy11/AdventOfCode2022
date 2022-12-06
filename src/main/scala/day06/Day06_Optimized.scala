@@ -33,9 +33,9 @@ def o_findMarker(input: String, consecutiveDistinct: Int, startingPoint: Int = 0
 @main def o_main: Unit = {
 
     val result1 = o_findMarker(input, 4)
-    //println(result1)
+    println(result1)
 
     val result2 = o_findMarker(input, 14, result1 + 10) // +10 because 14 - 4 = 10. There is definitely not a longer distinct sequence before that!
-    //println(result2)
+    println(result2)
 
 }
