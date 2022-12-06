@@ -9,7 +9,7 @@ object Day06Loops:
         //val input = Source.fromResource("Day06.input.txt").mkString
         val part1 = findMarker(input, length = 4)
         //println(part1)
-        val part2 = findMarker(input, length = 14)
+        val part2 = findMarker(input, length = 14, position = part1 + 10)
         //println(part2)
 
     @tailrec
