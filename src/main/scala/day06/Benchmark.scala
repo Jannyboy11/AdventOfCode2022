@@ -1,7 +1,7 @@
 package day06
 
 def warmup(): Unit =
-    for i <- 0 until 10000 do
+    for i <- 0 until 100000 do
         o_main
         bb_main
         Day06Loops.main(null)
@@ -9,7 +9,7 @@ def warmup(): Unit =
 @main def naive_benchmark: Unit = {
     warmup()
 
-    val iterations = 1000
+    val iterations = 10000
     var i = 0
 
     var Jan: Long = 0
