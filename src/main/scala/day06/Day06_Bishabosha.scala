@@ -48,5 +48,7 @@ def findIndexOptimal(input: String, n: Int): Int =
 //end of solution
 
 @main def bb_main: Unit =
-  println(part1(input))
-  println(part2(input))
+  val result1 = part1(input)
+  println(result1)
+  val result2 = part2(input)
+  println(result2)
