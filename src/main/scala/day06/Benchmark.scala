@@ -1,7 +1,7 @@
 package day06
 
 def warmup(): Unit =
-    for i <- 0 until 1000 do
+    for i <- 0 until 10000 do
         o_main
         bb_main
         Day06Loops.main(null)
@@ -9,7 +9,7 @@ def warmup(): Unit =
 @main def naive_benchmark: Unit = {
     warmup()
 
-    val iterations = 100
+    val iterations = 1000
     var i = 0
 
     var Jan: Long = 0
@@ -38,6 +38,5 @@ def warmup(): Unit =
     println(s"Jan's optimised solution took $mySolutionNanos nanoseconds on average.")
     println(s"Bishabosha's optimised solution took $bbSolutionNanos nanoseconds on average.")
     println(s"JavadocMD's optimised solution took $jdmdSolutionNanos nanoseconds on average.")
-    println(s"${if mySolutionNanos < bbSolutionNanos then "Jan" else "Bishabosha"} wins!")
 
 }

@@ -22,7 +22,7 @@ def o_findMarker(input: String, consecutiveDistinct: Int): Int =
 
     var i = consecutiveDistinct
     while java.lang.Integer.bitCount(set) != consecutiveDistinct do
-        set = makeSet(input, i-consecutiveDistinct, i)
+        set = makeSet(input, i - consecutiveDistinct, i)
         i += 1
 
     i-1
@@ -30,9 +30,9 @@ def o_findMarker(input: String, consecutiveDistinct: Int): Int =
 @main def o_main: Unit = {
 
     val result1 = o_findMarker(input, 4)
-    println(result1)
+    //println(result1)
 
     val result2 = o_findMarker(input, 14)
-    println(result2)
+    //println(result2)
 
 }
