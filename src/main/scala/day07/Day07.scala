@@ -49,13 +49,10 @@ def buildState(input: List[TerminalOutput], currentDir: DirectoryStructure | Nul
 def directorySize(dir: DirectoryStructure): Size =
     dir.files.values.sum + dir.childDirectories.values.map(directorySize).sum
 
-def collectDirectoriesBelowSize(dir: DirectoryStructure, size: Size): List[DirectoryStructure] =
-    val children = dir.childDirectories.values.toList.flatMap(collectDirectoriesBelowSize(_, size))
-    if directorySize(dir) < size then dir :: children else children
-
-def collectDirectoriesAboveSize(dir: DirectoryStructure, size: Size): List[DirectoryStructure] =
-    val children = dir.childDirectories.values.toList.flatMap(collectDirectoriesAboveSize(_, size))
-    if directorySize(dir) >= size then dir :: children else children
+def collectSizes(dir: DirectoryStructure, criterion: Size => Boolean): Iterable[Size] =
+    val mySize = directorySize(dir)
+    val children = dir.childDirectories.values.flatMap(collectSizes(_, criterion))
+    if criterion(mySize) then mySize :: children.toList else children
 
 @main def main: Unit = {
 
@@ -65,14 +62,14 @@ def collectDirectoriesAboveSize(dir: DirectoryStructure, size: Size): List[Direc
 
     // Possible optimization: cache sizes using memoization (Map[String, Size])
 
-    val result1 = collectDirectoriesBelowSize(rootDir, 100000).map(directorySize).sum
+    val result1 = collectSizes(rootDir, _ < 100000).sum
     println(result1)
 
     val result2 = {
         val totalUsed: Size = directorySize(rootDir)
         val totalUnused: Size = 70_000_000 - totalUsed
         val required: Size = 30_000_000 - totalUnused
-        collectDirectoriesAboveSize(rootDir, required).map(directorySize).min
+        collectSizes(rootDir, _ >= required).min
     }
     println(result2)
 
