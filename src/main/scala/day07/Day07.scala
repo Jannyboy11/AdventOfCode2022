@@ -50,14 +50,12 @@ def directorySize(dir: DirectoryStructure): Size =
     dir.files.values.sum + dir.childDirectories.values.map(directorySize).sum
 
 def collectDirectoriesBelowSize(dir: DirectoryStructure, size: Size): List[DirectoryStructure] =
-    val mySize = directorySize(dir)
     val children = dir.childDirectories.values.toList.flatMap(collectDirectoriesBelowSize(_, size))
-    if mySize < size then dir :: children else children
+    if directorySize(dir) < size then dir :: children else children
 
 def collectDirectoriesAboveSize(dir: DirectoryStructure, size: Size): List[DirectoryStructure] =
-    val mySize = directorySize(dir)
     val children = dir.childDirectories.values.toList.flatMap(collectDirectoriesAboveSize(_, size))
-    if mySize >= size then dir :: children else children
+    if directorySize(dir) >= size then dir :: children else children
 
 @main def main: Unit = {
 
