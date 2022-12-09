@@ -64,7 +64,7 @@ type Distance = Int
 case class CacheKey(x: Int, y: Int, height: Height, direction: Direction)
 type Cache = Map[CacheKey, Distance]
 
-def calculateDistance(grid: Grid, cacheKey: CacheKey, cache: Cache): Cache =
+def go2(grid: Grid, cacheKey: CacheKey, cache: Cache): Cache =
     if cache.contains(cacheKey) then cache
     else
         val rightX = grid.width - 1
@@ -80,15 +80,12 @@ def calculateDistance(grid: Grid, cacheKey: CacheKey, cache: Cache): Cache =
                 (0 to 9).foldLeft(cache){ case (c, h) => c.updated(cacheKey.copy(height = h), 0) }
             case CacheKey(x, y, _, direction) =>
                 val (otherX, otherY) = direction match
-                    case Left => (x-1, y)
-                    case Right => (x+1, y)
-                    case Up => (x, y-1)
-                    case Down => (x, y+1)
+                    case Left => (x-1, y); case Right => (x+1, y); case Up => (x, y-1); case Down => (x, y+1)
                 val otherHeight = grid(otherY)(otherX)
                 val neighbourKey = cacheKey.copy(x = otherX, y = otherY)
                 val neighbourCache = cache.get(neighbourKey) match
                     case Some(_) => cache
-                    case None => calculateDistance(grid, neighbourKey, cache)
+                    case None => go2(grid, neighbourKey, cache)
                 (0 to 9).foldLeft(neighbourCache) { case (c, h) =>
                     val neighbourDistance = if h > otherHeight then neighbourCache(neighbourKey.copy(height = h)) else 0
                     c.updated(cacheKey.copy(height = h), neighbourDistance + 1)
@@ -104,8 +101,7 @@ def scenicScore(coordinate: Coordinate, grid: Grid, cache: Cache): Int = coordin
 
     val result2 = {
         val cacheKeys = for y <- 0 until grid.height; x <- 0 until grid.width; d <- Direction.values yield CacheKey(x, y, grid(y)(x), d)
-        val cache = cacheKeys.foldLeft(Map.empty : Cache) { case (c, k) => calculateDistance(grid, k, c) }
-
+        val cache = cacheKeys.foldLeft[Cache](Map.empty) { case (c, k) => go2(grid, k, c) }
         val scores = for y <- 0 until grid.height; x <- 0 until grid.width yield scenicScore((x, y), grid, cache)
         scores.max
     }
