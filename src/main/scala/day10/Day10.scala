@@ -30,16 +30,22 @@ def step(instruction: Instruction, cpu: CPU, cycle: Cycle): (Cycle, CPU) = (cpu,
 def signalStrength(cpu: CPU, cycle: Cycle): Signal = cpu.X * cycle
 
 @tailrec
-def go[A](program: List[Instruction], cycle: Cycle, currentCpu: CPU, cpuQueue: SortedMap[Cycle, CPU], checkpoints: Iterable[Cycle], output: Output[A], acc: Seq[A]): Seq[A] =
-    if program.isEmpty then acc else
-        val (nextCheckPoints, nextSignals) = if checkpoints.nonEmpty && checkpoints.head == cycle then
-            (checkpoints.tail, acc :+ output(currentCpu, cycle)) else (checkpoints, acc)
+def go[A](program: List[Instruction], cycle: Cycle, currentCpu: CPU, cpuQueue: SortedMap[Cycle, CPU], checkpoints: Iterable[Cycle], outputFunction: Output[A], outputValuesAcc: Seq[A]): Seq[A] =
+    if program.nonEmpty || cpuQueue.nonEmpty then
 
-        val (queueHead, nextCpu) = cpuQueue.head
-        if cycle == queueHead then
-            go(program.tail, cycle + 1, nextCpu, cpuQueue.tail + step(program.head, nextCpu, cycle), nextCheckPoints, output, nextSignals)
-        else
-            go(program, cycle + 1, currentCpu, cpuQueue, nextCheckPoints, output, nextSignals)
+        val (nextCheckPoints, nextOutputs) = if checkpoints.nonEmpty && checkpoints.head == cycle then
+            (checkpoints.tail, outputValuesAcc :+ outputFunction(currentCpu, cycle)) else (checkpoints, outputValuesAcc)
+
+        val (nextUpdateIndex, theNextCpu) = cpuQueue.head
+        val (nextProgram, nextQueue, nextCpu) =
+            if cycle == nextUpdateIndex then
+                if program.nonEmpty then (program.tail, cpuQueue.tail + step(program.head, theNextCpu, cycle), theNextCpu) else (program, cpuQueue.tail, theNextCpu)
+            else
+                (program, cpuQueue, currentCpu)
+
+        go(nextProgram, cycle + 1, nextCpu, nextQueue, nextCheckPoints, outputFunction, nextOutputs)
+
+    else outputValuesAcc
 
 type On = '#'
 type Off = '.'
@@ -57,7 +63,7 @@ def draw(cpu: CPU, cycle: Cycle, width: Int): Pixel = if Math.abs((cycle-1) % wi
     println(result1)
 
     val width = 40
-    go[Pixel](input, initCycle, initCpu, initQueue, Range.inclusive(0, 240), draw(_, _, width), Seq())
+    go[Pixel](input, initCycle, initCpu, initQueue, Range.inclusive(1, 240), draw(_, _, width), Seq())
         .grouped(width)
         .foreach(row => println(row.mkString))
     //result2 = RKAZAJBR
