@@ -28,14 +28,18 @@ def processTail(head: Point, tail: Point): Point =
     val xDiff = Math.abs(head.x - tail.x)
     val yDiff = Math.abs(head.y - tail.y)
 
-    var newX = if xDiff > 1 then updatedX else tail.x
-    var newY = if yDiff > 1 then updatedY else tail.y
-
+    var newX = tail.x
+    var newY = tail.y
     if xDiff + yDiff > 2 then
         newX = updatedX
         newY = updatedY
+    else if xDiff > 1 then
+        newX = updatedX
+    else if yDiff > 1 then
+        newY = updatedY
 
     Point(newX, newY)
+end processTail
 
 def processHead(head: Point, direction: Direction): Point = direction match
     case Left => head.copy(x = head.x - 1)
